@@ -410,6 +410,14 @@
 
     var LAT = 12.9141, LON = 74.856, ZOOM = 11, TILE = 256;
 
+    /* The panel is a letterbox on short phones — about 90px tall — and the
+       MANGALURU label sits roughly 65px below the pin at zoom 11, so it falls
+       outside the crop. Backing off one zoom level halves that offset and
+       brings both the label and the coastline back inside. */
+    function zoomFor(h) {
+      return h < 120 ? ZOOM - 1 : ZOOM;
+    }
+
     function lonToX(lon, z) {
       return ((lon + 180) / 360) * Math.pow(2, z);
     }
@@ -423,8 +431,11 @@
     }
 
     function build() {
-      var w = el.clientWidth;
-      var h = el.clientHeight;
+      // Fractional, not clientWidth: the panel is fluid, so its used width is
+      // rarely a whole pixel and rounding up leaves a sliver uncovered.
+      var rect = el.getBoundingClientRect();
+      var w = rect.width;
+      var h = rect.height;
       if (!w || !h) return false;
 
       // Retina: draw at 2x tile density so the map isn't soft on good screens.
@@ -432,12 +443,25 @@
       var suffix = scale === 2 ? "@2x" : "";
       var px = TILE * scale;
 
-      var left = lonToX(LON, ZOOM) * px - w / 2;
-      var top = latToY(LAT, ZOOM) * px - h / 2;
+      // Everything below works in tile-pixel space, so the CSS dimensions have
+      // to be scaled into it first. Mixing the two centred the map on w/(2*sc)
+      // instead of w/2 and asked for half the tile columns needed, which left a
+      // dead strip down the right edge on every retina screen.
+      var vw = w * scale;
+      var vh = h * scale;
 
+      var zoom = zoomFor(h);
+
+      var left = lonToX(LON, zoom) * px - vw / 2;
+      var top = latToY(LAT, zoom) * px - vh / 2;
+
+      // Floor on both ends covers [left, left+vw] exactly once the units agree.
+      // The per-tile pixel of overlap below absorbs any float-boundary case, so
+      // no extra ring of tiles is needed.
       var x0 = Math.floor(left / px), y0 = Math.floor(top / px);
-      var x1 = Math.floor((left + w) / px), y1 = Math.floor((top + h) / px);
-      var max = Math.pow(2, ZOOM);
+      var x1 = Math.floor((left + vw) / px);
+      var y1 = Math.floor((top + vh) / px);
+      var max = Math.pow(2, zoom);
       var frag = document.createDocumentFragment();
 
       for (var ty = y0; ty <= y1; ty++) {
@@ -451,10 +475,13 @@
           img.decoding = "async";
           img.style.left = (tx * px - left) / scale + "px";
           img.style.top = (ty * px - top) / scale + "px";
-          img.style.width = px / scale + "px";
-          img.style.height = px / scale + "px";
+          // A pixel of overlap. Tile positions are fractional, so neighbours
+          // otherwise leave hairline seams where the rounding falls apart; the
+          // next tile paints over the surplus.
+          img.style.width = px / scale + 1 + "px";
+          img.style.height = px / scale + 1 + "px";
           img.src =
-            "https://basemaps.cartocdn.com/dark_all/" + ZOOM + "/" + wrapped +
+            "https://basemaps.cartocdn.com/dark_all/" + zoom + "/" + wrapped +
             "/" + ty + suffix + ".png";
           frag.appendChild(img);
         }
@@ -494,6 +521,22 @@
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(build, 220);
     });
+
+    // The panel is fluid and sits below a form whose height can settle late
+    // (web fonts, validation text). A window resize never fires for that, so
+    // watch the element itself and re-stitch when its box actually changes.
+    if (typeof ResizeObserver === "function") {
+      var lastW = 0, lastH = 0, roTimer;
+      new ResizeObserver(function () {
+        if (!built) return;
+        var r = el.getBoundingClientRect();
+        if (Math.abs(r.width - lastW) < 1 && Math.abs(r.height - lastH) < 1) return;
+        lastW = r.width;
+        lastH = r.height;
+        clearTimeout(roTimer);
+        roTimer = setTimeout(build, 120);
+      }).observe(el);
+    }
   })();
 
   /* ---------------------------- contact form ----------------------------- */
