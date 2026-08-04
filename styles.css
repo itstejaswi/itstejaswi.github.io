@@ -490,7 +490,9 @@ a {
 
 /* Children cascade in behind the page itself. The delay is set per-element in
    app.js so the stagger follows document order regardless of nesting. */
-.page.is-active .stagger > * {
+/* The glyph is excluded: it runs its own fade to a very low opacity, and
+   riseIn would end it at full strength. */
+.page.is-active .stagger > *:not(.page-glyph) {
   animation: riseIn 0.5s var(--out) both;
   animation-delay: calc(var(--i, 0) * 55ms + 90ms);
 }
@@ -516,6 +518,7 @@ a {
 }
 
 .page-inner {
+  position: relative;
   width: 100%;
   max-width: var(--measure);
   /* Top-anchored, not centred. Centring made every page's heading land at a
@@ -535,7 +538,9 @@ a {
   display: flex;
   align-items: baseline;
   gap: 16px;
-  margin-bottom: clamp(14px, 2.4vh, 28px);
+  /* Every page carries at least 11% slack, so the heading is given real
+     separation from the content rather than a token gap. */
+  margin-bottom: clamp(20px, 3.6vh, 40px);
 }
 
 .page-title {
@@ -552,7 +557,7 @@ a {
 }
 
 .page-lede {
-  margin: 0 0 clamp(14px, 2.4vh, 26px);
+  margin: 0 0 clamp(18px, 3vh, 34px);
   max-width: 62ch;
   font-family: var(--display);
   font-size: clamp(16px, 1.9vw, 20px);
@@ -1056,6 +1061,100 @@ main {
   .pillar p {
     padding-top: 0;
     max-width: 66ch;
+  }
+}
+
+/* ------------------------------ page glyph ----------------------------- */
+
+/* A large, very faint mark behind each page's heading, echoing the engraved
+   portrait on home. The top-left corner is the one region that is open on every
+   page — the title sits there and nothing else does — so the mark never
+   underlays a tile. Pointer-inert and outside the flow, so it can affect
+   neither layout nor scroll height; masked so it dissolves rather than ending
+   on an edge. */
+.page-glyph {
+  position: absolute;
+  /* One token drives both the size and the horizontal offset, so the overlap
+     stays proportional at every viewport instead of drifting. */
+  --glyph-size: clamp(200px, min(30vh, 26vw), 340px);
+  /* Anchored to the content column's left edge, offset by a fixed fraction of
+     its own size. That keeps the overlap proportional — only the mark's right
+     edge tucked behind the heading, the bulk of it out in the margin — at every
+     width, rather than the offset drifting as the window grows. Some overlap
+     reads as layered depth; too much is just noise behind the text. */
+  left: max(
+    calc(50% - var(--measure) / 2 - var(--glyph-size) * 0.86),
+    calc(var(--glyph-size) * -0.58)
+  );
+  top: 0;
+  z-index: 0;
+  width: var(--glyph-size);
+  height: var(--glyph-size);
+  color: var(--amber);
+  opacity: 0.045;
+  pointer-events: none;
+  user-select: none;
+  mask-image: radial-gradient(
+    ellipse 62% 62% at 50% 50%,
+    #000 40%,
+    rgba(0, 0, 0, 0.5) 72%,
+    transparent 96%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 62% 62% at 50% 50%,
+    #000 40%,
+    rgba(0, 0, 0, 0.5) 72%,
+    transparent 96%
+  );
+  animation: glyphIn 900ms var(--out) both;
+}
+
+.page-glyph svg {
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes glyphIn {
+  from {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+  to {
+    opacity: 0.045;
+    transform: none;
+  }
+}
+
+/* Content sits above the glyph. Scoped to the glyph's own siblings by z-index
+   alone — an earlier version set `position: relative` on every child of
+   .page-inner, which outranked `.hero-engraving { position: absolute }` and
+   dragged the hero portrait back into the flow, inflating the home page by
+   400px. Raising the stacking order is all that is actually needed here. */
+.page-inner {
+  z-index: 1;
+}
+
+@media (max-width: 900px) {
+  /* Smaller on a phone, and marginally stronger: at this size the mark covers
+     far less area, so the desktop opacity disappears altogether. */
+  .page-glyph {
+    --glyph-size: clamp(150px, 38vw, 230px);
+    /* Less of the mark is pushed off-canvas on a phone: the desktop offset is
+       scaled to a wide margin that simply does not exist here, and it left only
+       a sliver showing. */
+    left: calc(var(--glyph-size) * -0.34);
+    opacity: 0.075;
+  }
+
+  @keyframes glyphIn {
+    from {
+      opacity: 0;
+      transform: scale(1.04);
+    }
+    to {
+      opacity: 0.075;
+      transform: none;
+    }
   }
 }
 
@@ -2087,7 +2186,9 @@ main {
 .contact-grid {
   display: grid;
   grid-template-columns: 0.85fr 1.15fr;
-  gap: clamp(28px, 5vw, 64px);
+  /* A generous gutter: the aside and the form are two distinct things, and at
+     the previous spacing they read as one crowded block. */
+  gap: clamp(36px, 6.5vw, 88px);
   align-items: start;
 }
 
@@ -2104,10 +2205,10 @@ main {
    and visually calmer than a wall of links. */
 .contact-links {
   list-style: none;
-  margin: 0 0 18px;
+  margin: 0 0 26px;
   padding: 0;
   display: grid;
-  gap: 7px;
+  gap: 10px;
 }
 
 .clink {
@@ -2219,7 +2320,7 @@ main {
 
 .contact-form {
   position: relative;
-  padding: clamp(20px, 2.6vw, 28px);
+  padding: clamp(24px, 3vw, 34px);
   border-radius: var(--radius);
   background: var(--material);
   backdrop-filter: var(--blur);
@@ -2228,7 +2329,7 @@ main {
 }
 
 .field {
-  margin-bottom: 14px;
+  margin-bottom: 18px;
 }
 
 .field label {

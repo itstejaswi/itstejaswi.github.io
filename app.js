@@ -143,7 +143,11 @@
   function titleFor(view) {
     var base = "Tejaswi";
     if (view === "home") return base;
-    return view.charAt(0).toUpperCase() + view.slice(1) + " · " + base;
+    // The route stays "work" so existing links keep resolving, but the section
+    // is presented as Projects.
+    var labels = { work: "Projects" };
+    var name = labels[view] || view.charAt(0).toUpperCase() + view.slice(1);
+    return name + " · " + base;
   }
 
   function renderPager(count) {
