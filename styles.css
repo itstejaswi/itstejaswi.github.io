@@ -2618,25 +2618,26 @@ main {
   }
 
   /* Shorter still — Firefox and Chrome on iOS keep more chrome on screen than
-     Safari does. Trade type size for the calls to action staying visible. */
+     Safari does. The blurb is the first thing to go rather than the portrait:
+     shrinking the engraving to fit left it a 130px strip against 53% copy,
+     which reads as a header image rather than a presence. The tagline already
+     says what the blurb elaborates. */
   @media (max-height: 760px) {
     .hero-engraving {
-      height: clamp(130px, 18vh, 180px);
-    }
-
-    .hero-name-main {
-      font-size: clamp(40px, 12vw, 54px);
-    }
-
-    .hero-tagline {
-      font-size: 17px;
-      margin-bottom: 8px;
+      height: clamp(200px, 27vh, 260px);
     }
 
     .hero-blurb {
-      font-size: 14.5px;
-      line-height: 1.55;
-      margin-bottom: 12px;
+      display: none;
+    }
+
+    .hero-name-main {
+      font-size: clamp(42px, 12.5vw, 56px);
+    }
+
+    .hero-tagline {
+      font-size: 17.5px;
+      margin-bottom: 18px;
     }
 
     .hero-hi {
@@ -2645,7 +2646,7 @@ main {
     }
 
     .hero-name {
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
   }
 
