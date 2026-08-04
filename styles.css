@@ -2083,6 +2083,13 @@ main {
   background: #0b0d12;
   box-shadow: var(--glass-edge);
   transition: box-shadow 0.35s var(--ease);
+  /* The tiles carry a CSS filter, which promotes them to their own layer and
+     lets WebKit paint them past the rounded overflow clip — square corners
+     bleed out over the border on iOS. Masking the container forces it to
+     render into its own buffer, where the radius is honoured. */
+  isolation: isolate;
+  -webkit-mask-image: -webkit-radial-gradient(#fff, #000);
+  mask-image: radial-gradient(#fff, #000);
 }
 
 .origin-map:hover {
