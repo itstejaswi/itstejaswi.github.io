@@ -14,13 +14,13 @@
       rel="preload"
       href="assets/portrait-engraving.png"
       as="image"
-      media="(min-width: 701px)"
+      media="(min-width: 901px)"
     />
     <link
       rel="preload"
       href="assets/portrait-crop.png"
       as="image"
-      media="(max-width: 700px)"
+      media="(max-width: 900px)"
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -81,12 +81,12 @@
 
             <figure class="hero-engraving" aria-hidden="true">
               <picture>
-                <!-- Phones get a head-and-shoulders crop. The full-frame source
-                     is 2:3 with tall empty margins, so in a wide, short band it
-                     could only render as a small thumbnail. Only one file is
-                     ever downloaded. -->
+                <!-- The crop is used wherever the hero stacks, which is below
+                     900px — the same breakpoint the layout switches at. If the
+                     two disagree, the stacked band loads the full-frame source
+                     and the portrait renders as a small, flat strip. -->
                 <source
-                  media="(max-width: 700px)"
+                  media="(max-width: 900px)"
                   srcset="assets/portrait-crop.png"
                   width="950"
                   height="830"
@@ -119,36 +119,38 @@
               Service Engineer II · Health &amp; Life Sciences S&amp;P · Microsoft
             </p>
 
-            <div class="about-lede">
-              <p>
-                I lead high-stakes escalations, drive service reliability
-                improvements, and mentor engineers across enterprise Healthcare
-                SaaS on Azure. I don't just solve problems — I help build the
-                processes and playbooks that stop them recurring.
-              </p>
-            </div>
+            <div class="editorial">
+              <div class="about-lede">
+                <p>
+                  I lead high-stakes escalations, drive service reliability
+                  improvements, and mentor engineers across enterprise Healthcare
+                  SaaS on Azure. I don't just solve problems — I help build the
+                  processes and playbooks that stop them recurring.
+                </p>
+              </div>
 
-            <div class="about-body">
-              <p>
-                Nearly a decade in healthcare IT has given me a systems thinker's
-                mindset and a sharp instinct for risk, resilience and
-                accountability — the things compliance actually demands. I'm
-                growing toward Principal and engineering management, where I can
-                shape both how systems are built and how teams operate. The best
-                engineering cultures treat those as inseparable.
-              </p>
-            </div>
+              <div class="about-body">
+                <p>
+                  Nearly a decade in healthcare IT has given me a systems thinker's
+                  mindset and a sharp instinct for risk, resilience and
+                  accountability — the things compliance actually demands. I'm
+                  growing toward Principal and engineering management, where I can
+                  shape both how systems are built and how teams operate. The best
+                  engineering cultures treat those as inseparable.
+                </p>
+              </div>
 
-            <div class="focus stagger">
-              <p class="focus-label">
-                <span class="focus-pulse" aria-hidden="true"></span>
-                Currently focused on
-              </p>
-              <ul class="focus-list" role="list">
-                <li>Agentic AI tooling</li>
-                <li>Optimising technology throughput</li>
-                <li>Making fixes outlive the incident</li>
-              </ul>
+              <aside class="focus stagger">
+                <p class="focus-label">
+                  <span class="focus-pulse" aria-hidden="true"></span>
+                  Currently focused on
+                </p>
+                <ul class="focus-list" role="list">
+                  <li>Agentic AI tooling</li>
+                  <li>Optimising technology throughput</li>
+                  <li>Making fixes outlive the incident</li>
+                </ul>
+              </aside>
             </div>
           </div>
         </article>

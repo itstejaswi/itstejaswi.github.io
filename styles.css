@@ -1059,6 +1059,131 @@ main {
   }
 }
 
+/* ------------------------------ editorial ------------------------------ */
+
+/* A magazine spread rather than a single narrow column. The lede runs full
+   width as a standfirst, then the body and the focus panel sit side by side —
+   which uses the page's width instead of stranding the copy in its left half.
+   Collapses to one column below the two-column threshold. */
+.editorial {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  column-gap: clamp(32px, 5vw, 68px);
+  row-gap: clamp(18px, 3vh, 30px);
+  align-items: start;
+}
+
+.editorial .about-lede {
+  grid-column: 1 / -1;
+}
+
+/* The standfirst: set wider and given its own rule beneath, exactly as a
+   magazine sets an introductory paragraph. */
+.editorial .about-lede p {
+  max-width: 42ch;
+  font-size: clamp(19px, 1.9vw, 25px);
+  line-height: 1.44;
+  padding-bottom: clamp(16px, 2.6vh, 26px);
+  border-bottom: 1px solid var(--hairline);
+  margin-bottom: 0;
+}
+
+.editorial .about-body {
+  grid-column: 1;
+}
+
+.editorial .about-body p {
+  /* The measure is set by the column now, not an arbitrary cap. */
+  max-width: none;
+  font-size: clamp(16px, 1.25vw, 18px);
+  line-height: 1.74;
+  margin-bottom: 0;
+}
+
+/* A drop cap anchors the column and signals "this is the article". */
+.editorial .about-body p::first-letter {
+  float: left;
+  margin: 0.02em 0.09em 0 0;
+  font-family: var(--display);
+  font-size: 3.1em;
+  font-weight: 700;
+  line-height: 0.82;
+  letter-spacing: var(--track-hero);
+  color: var(--amber);
+}
+
+/* The focus panel becomes a sidebar: set apart by a rule rather than a box,
+   which is how a magazine handles a standout column. The rule runs the full
+   column height rather than stopping at the last item, so it reads as a
+   structural gutter instead of a stray line. */
+.editorial .focus {
+  grid-column: 2;
+  grid-row: 2 / span 2;
+  align-self: stretch;
+  padding-top: 0;
+  border-top: 0;
+  padding-left: clamp(20px, 2.4vw, 32px);
+  border-left: 1px solid var(--hairline);
+}
+
+.editorial .focus-list {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 900px) {
+  /* One column: the sidebar returns to a full-width block beneath the body,
+     with its rule back on top where it reads as a divider, not a gutter. */
+  .editorial {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: clamp(14px, 2.2vh, 22px);
+  }
+
+  .editorial .about-body,
+  .editorial .focus {
+    grid-column: 1;
+  }
+
+  .editorial .focus {
+    /* Reset the desktop row span, or the sidebar keeps its two-row placement
+       and sits alongside the body instead of stacking beneath it. */
+    grid-row: auto;
+    align-self: auto;
+    padding-left: 0;
+    border-left: 0;
+    padding-top: clamp(14px, 2.2vh, 22px);
+    border-top: 1px solid var(--hairline);
+  }
+
+  .editorial .focus-list {
+    grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  }
+
+  /* The desktop editorial type scale is set for a wide two-column spread; on
+     phones it must return to the compact body sizes or the page overflows. */
+  .editorial .about-lede p {
+    font-size: 17px;
+    line-height: 1.45;
+  }
+
+  .editorial .about-body p {
+    font-size: 15px;
+    line-height: 1.62;
+  }
+
+  /* A drop cap needs a tall column to sit in; at phone widths it crowds the
+     first two lines rather than anchoring them. */
+  .editorial .about-body p::first-letter {
+    float: none;
+    margin: 0;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+  }
+}
+
 /* -------------------------------- focus -------------------------------- */
 
 /* Replaces the old stat readout: rather than manufacture numbers, this simply
@@ -2285,11 +2410,20 @@ main {
   .hero-engraving {
     position: static;
     order: -1;
-    /* Full-bleed: cancel the page gutter so the portrait runs edge to edge. */
-    height: clamp(210px, 30vh, 310px);
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
+    /* Full-bleed: cancel the page gutter so the portrait runs edge to edge.
+       100% of the page, not 100vw — the viewport unit includes the scrollbar
+       gutter, which pushed the figure 7px past the right edge.
+
+       The height scales on both axes rather than snapping between fixed steps:
+       `vh` lets it grow on a tall window, `vw` lets it grow on a wide one, and
+       `min()` takes whichever is the real constraint — so a short, wide window
+       is governed by its height rather than being handed a band it cannot fit.
+       The 26vh term is what keeps the calls to action on screen: the copy below
+       needs roughly two thirds of the page, whatever the width. */
+    height: clamp(180px, min(26vh, 38vw), 400px);
+    width: auto;
+    margin-left: calc(var(--gutter) * -1);
+    margin-right: calc(var(--gutter) * -1);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2369,9 +2503,11 @@ main {
     }
   }
 
+  /* Contact keeps its two columns down to the phone breakpoint: stacking it at
+     900px made the page far taller than a 900px-tall window, and there is
+     ample width for both columns at this size. */
   .contact-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 24px;
   }
 
 
@@ -2383,6 +2519,12 @@ main {
 @media (max-width: 700px) {
   body {
     font-size: 15.5px;
+  }
+
+  /* Contact stacks here rather than at 900px — see the note in that block. */
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
 
   /* Phones get generous spacing rather than a forced single-screen fit. The
