@@ -2492,8 +2492,18 @@ main {
   .footer {
     left: 0;
     right: 0;
-    padding: 10px var(--gutter);
+    padding: 8px var(--gutter);
     text-align: center;
+  }
+
+  /* Smaller on a phone: the footer is a signature, not content, and at the
+     desktop size it competes with the calls to action directly above it. */
+  .footer-note {
+    font-size: 10px;
+  }
+
+  .footer-sep {
+    padding: 0 4px;
   }
 
   .hero-inner {
@@ -2586,21 +2596,56 @@ main {
   /* Shorter phones cannot carry both a generous portrait and the full hero
      copy. Rather than shrink the portrait everywhere, only short screens trade
      it down and tighten the copy's rhythm — tall phones keep the larger crop. */
+  /* Real phones lose 130-160px to browser chrome, so an iPhone 16 Pro reports
+     roughly 716-745px rather than its nominal 874. At those heights the hero
+     could not fit and the calls to action fell off the bottom. */
   @media (max-height: 860px) {
     .hero-engraving {
-      height: clamp(180px, 25vh, 250px);
+      height: clamp(150px, 21vh, 220px);
     }
 
     .hero-name {
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .hero-tagline {
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .hero-blurb {
-      margin-bottom: 16px;
+      margin-bottom: 14px;
+    }
+  }
+
+  /* Shorter still — Firefox and Chrome on iOS keep more chrome on screen than
+     Safari does. Trade type size for the calls to action staying visible. */
+  @media (max-height: 760px) {
+    .hero-engraving {
+      height: clamp(130px, 18vh, 180px);
+    }
+
+    .hero-name-main {
+      font-size: clamp(40px, 12vw, 54px);
+    }
+
+    .hero-tagline {
+      font-size: 17px;
+      margin-bottom: 8px;
+    }
+
+    .hero-blurb {
+      font-size: 14.5px;
+      line-height: 1.55;
+      margin-bottom: 12px;
+    }
+
+    .hero-hi {
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .hero-name {
+      margin-bottom: 8px;
     }
   }
 
@@ -2611,9 +2656,11 @@ main {
     gap: 24px;
   }
 
-
-  .origin {
-    display: none;
+  /* The map stays. It was hidden here to save vertical space before the page
+     scrolled internally; now that it does, hiding it only removed the one
+     visual element on an otherwise plain column. */
+  .origin-map {
+    aspect-ratio: 5 / 2;
   }
 }
 

@@ -399,18 +399,6 @@
     });
   })();
 
-  /* --------------------------- email button ------------------------------ */
-
-  /* The button only ever hands the address to the visitor's mail client — it
-     is never written into the DOM, so it cannot be read off the rendered page
-     either. The mask in the markup stays as-is. */
-  var emailBtn = document.getElementById("email-reveal");
-  if (emailBtn) {
-    emailBtn.addEventListener("click", function () {
-      window.location.href = "mailto:" + EMAIL;
-    });
-  }
-
   /* ------------------------------ origin map ----------------------------- */
 
   /* A static slippy-map view stitched from CartoDB dark-matter tiles.
@@ -466,11 +454,7 @@
           img.style.width = px / scale + "px";
           img.style.height = px / scale + "px";
           img.src =
-            // `dark_nolabels`, not `dark_all`: the labelled basemap renders the
-            // city name into the tile itself, which puts a location identifier
-            // on the page. This variant ships the same styling with no place
-            // names, so the map stays purely atmospheric.
-            "https://basemaps.cartocdn.com/dark_nolabels/" + ZOOM + "/" + wrapped +
+            "https://basemaps.cartocdn.com/dark_all/" + ZOOM + "/" + wrapped +
             "/" + ty + suffix + ".png";
           frag.appendChild(img);
         }
