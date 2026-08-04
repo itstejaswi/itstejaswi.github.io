@@ -760,6 +760,13 @@ main {
 .hero-name-main {
   display: block;
   font-size: clamp(52px, 9.5vw, 108px);
+  /* `background-clip: text` paints only inside the element's box, so a tight
+     line box guillotined the descender of the "j" and made it read as an "i".
+     The extra line-height plus a little padding give the glyph room; the
+     negative bottom margin puts the layout back where it was. */
+  line-height: 1.2;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
   letter-spacing: var(--track-hero);
   background: linear-gradient(
     170deg,
@@ -2155,7 +2162,7 @@ main {
   .hero-engraving {
     position: static;
     order: -1;
-    height: clamp(220px, 32vh, 320px);
+    height: clamp(200px, 30vh, 300px);
     width: 100%;
     display: flex;
     align-items: center;
@@ -2174,17 +2181,19 @@ main {
     height: 100%;
     object-fit: contain;
     object-position: 50% 50%;
-    opacity: 0.46;
+    /* Phones render this on a small, often dim screen, so it needs more
+       presence than the desktop treatment to avoid washing out entirely. */
+    opacity: 0.66;
     mask-image: radial-gradient(
-      ellipse 56% 50% at 50% 48%,
-      #000 50%,
-      rgba(0, 0, 0, 0.45) 78%,
+      ellipse 60% 54% at 50% 48%,
+      #000 56%,
+      rgba(0, 0, 0, 0.5) 80%,
       transparent 98%
     );
     -webkit-mask-image: radial-gradient(
-      ellipse 56% 50% at 50% 48%,
-      #000 50%,
-      rgba(0, 0, 0, 0.45) 78%,
+      ellipse 60% 54% at 50% 48%,
+      #000 56%,
+      rgba(0, 0, 0, 0.5) 80%,
       transparent 98%
     );
   }
@@ -2195,7 +2204,7 @@ main {
       transform: scale(1.03);
     }
     to {
-      opacity: 0.46;
+      opacity: 0.66;
       transform: none;
     }
   }
@@ -2203,6 +2212,27 @@ main {
   /* The copy block never sits over the engraving on phones. */
   .hero-copy {
     margin-left: 0;
+  }
+
+  /* Shorter phones cannot carry both a generous portrait and the full hero
+     copy. Rather than shrink the portrait everywhere, only short screens trade
+     it down and tighten the copy's rhythm — tall phones keep the larger crop. */
+  @media (max-height: 860px) {
+    .hero-engraving {
+      height: clamp(190px, 26vh, 260px);
+    }
+
+    .hero-name {
+      margin-bottom: 12px;
+    }
+
+    .hero-tagline {
+      margin-bottom: 12px;
+    }
+
+    .hero-blurb {
+      margin-bottom: 16px;
+    }
   }
 
   .contact-grid {

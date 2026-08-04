@@ -1,0 +1,13 @@
+Fix clipped descender and strengthen the mobile portrait
+
+The "j" in the hero name rendered as an "i" because `background-clip: text`
+paints only inside the element's box, and a line-height of 1 left no room
+below the baseline, guillotining the descender. Give the line box room and pad
+the element, then pull the layout back with a matching negative margin.
+
+On phones the engraving was both too small and too faint to read as a portrait
+at all. Raise its opacity and widen the mask core, and scale it up on tall
+devices. Short screens keep a smaller crop and a tighter copy rhythm, since a
+larger portrait there pushes the calls to action off the page.
+
+Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>
