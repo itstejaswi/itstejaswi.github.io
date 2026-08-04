@@ -2,9 +2,9 @@
   <!-- Solid amber tile with a knocked-out T. Geometric rather than
        calligraphic: a browser tab renders this at 16px, where modulated
        brush strokes turn to mush. -->
-  <rect width="64" height="64" rx="14" fill="#ffaa3d"/>
+  <rect width="64" height="64" rx="14" fill="#ff9f0a"/>
   <path
     d="M15 19 H49 V26 H36.5 V47 H27.5 V26 H15 Z"
-    fill="#06070a"
+    fill="#000000"
   />
 </svg>

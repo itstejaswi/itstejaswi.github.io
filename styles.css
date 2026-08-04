@@ -1,45 +1,47 @@
 /* ============================================================================
    Tejaswi — personal site.
 
-   Design language inherited from Vector: amber HUD over near-black ink.
-   Apple-adjacent typography (SF Pro with optical tracking), translucent
-   materials that blur AND saturate, hairline separators,
-   spring easing. Calmer than Vector: this is a dossier, not a cockpit.
+   Design language: Apple's dark-mode system palette and material hierarchy —
+   systemOrange accent, pure-white label ramp, translucent surfaces that blur
+   AND saturate, specular edges, SF Pro with optical tracking, spring easing.
    ========================================================================= */
 
 :root {
-  --amber: #ffaa3d;
-  --amber-bright: #ffd9a0;
-  --amber-dim: #c9903a;
-  --ink: #06070a;
-  --ink-2: #0a0c11;
+  /* Apple systemOrange (dark mode) and a tint/shade pair derived from it. */
+  --amber: #ff9f0a;
+  --amber-bright: #ffd08a;
+  --amber-dim: #c77b06;
+  /* Apple layers its dark UI over true black; surfaces lift off it. */
+  --ink: #000000;
+  --ink-2: #0a0a0c;
 
-  /* Vibrancy ladder modelled on Apple's material hierarchy. Each step is more
-     opaque than the last; all of them lean on heavy blur plus a saturation
-     boost so colour from behind bleeds through rather than being flattened to
-     grey. Lower alpha than a conventional "card" is the whole point — the
-     surface should feel like frosted glass sitting on the page, not paint. */
-  --material-ultrathin: rgba(28, 30, 38, 0.34);
-  --material-thin: rgba(26, 28, 36, 0.44);
-  --material: rgba(24, 26, 33, 0.52);
-  --material-thick: rgba(20, 22, 29, 0.68);
+  /* Vibrancy ladder modelled on Apple's material hierarchy, built from their
+     neutral dark greys (systemGray6 #1c1c1e upward) rather than a blue-tinted
+     slate. Each step is more opaque than the last; all lean on heavy blur plus
+     a saturation boost so colour from behind bleeds through rather than being
+     flattened to grey. Lower alpha than a conventional "card" is the whole
+     point — these should feel like frosted glass, not paint. */
+  --material-ultrathin: rgba(44, 44, 46, 0.34);
+  --material-thin: rgba(36, 36, 38, 0.44);
+  --material: rgba(28, 28, 30, 0.55);
+  --material-thick: rgba(24, 24, 26, 0.72);
   --blur: saturate(190%) blur(30px);
   --blur-heavy: saturate(200%) blur(44px);
 
   /* Apple's glass edges are not a uniform 1px box: light catches the top rim
-     and falls away toward the bottom. These two tokens build that gradient. */
-  --hairline: rgba(255, 255, 255, 0.08);
-  --hairline-warm: rgba(255, 170, 61, 0.16);
-  --edge-top: rgba(255, 255, 255, 0.14);
+     and falls away toward the bottom. These tokens build that gradient. */
+  --hairline: rgba(255, 255, 255, 0.09);
+  --hairline-warm: rgba(255, 159, 10, 0.18);
+  --edge-top: rgba(255, 255, 255, 0.15);
   --edge-bottom: rgba(255, 255, 255, 0.04);
-  --stroke: rgba(255, 255, 255, 0.1);
+  --stroke: rgba(255, 255, 255, 0.11);
 
-  --text: #f2eee6;
-  --text-2: rgba(242, 238, 230, 0.62);
-  /* 0.52 is the lowest alpha that clears WCAG AA (4.5:1) for normal-size text
-     over --ink; it measures 5.05:1. Anything dimmer fails on the small mono
-     labels, tags and captions this token is used for. */
-  --text-3: rgba(242, 238, 230, 0.52);
+  /* Apple's dark-mode label ramp: pure white stepped down by opacity.
+     Their tertiary sits near 30%, but that fails WCAG AA on the small mono
+     labels this token drives, so it is held at 52% (5.4:1 over black). */
+  --text: #ffffff;
+  --text-2: rgba(255, 255, 255, 0.6);
+  --text-3: rgba(255, 255, 255, 0.52);
   --ok: #32d74b;
 
   /* Apple splits its UI face by optical size: SF Pro Display above ~20px,
@@ -59,10 +61,12 @@
   --track-title: -0.028em;
   --track-heading: -0.021em;
   --track-body: -0.011em;
-  --track-caption: 0em;
+  --track-caption: 0.006em;
   --track-mono: 0.08em;
 
-  --radius: 14px;
+  /* Apple's dark-mode card radius sits around 16px at this scale, with a
+     smaller step for nested elements. */
+  --radius: 16px;
   --radius-sm: 10px;
 
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
@@ -112,8 +116,21 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   font-optical-sizing: auto;
-  /* Apple enables contextual alternates and proportional figures by default. */
+  /* Apple enables contextual alternates and kerning by default. */
   font-feature-settings: "calt" 1, "kern" 1;
+}
+
+/* Mono labels and figures use tabular, lining numerals so digits occupy equal
+   width — Apple's convention wherever numbers sit in a column or update in
+   place, since proportional figures make them jitter. */
+.hud-meta,
+.pillar-num,
+.chip,
+.clink-label,
+.focus-label,
+.hud-title {
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
 }
 
 /* Display face for anything large enough to need optical tightening. */
@@ -129,7 +146,7 @@ h3,
 }
 
 ::selection {
-  background: rgba(255, 170, 61, 0.28);
+  background: rgba(255, 159, 10, 0.28);
   color: var(--amber-bright);
 }
 
@@ -176,8 +193,8 @@ a {
 .backdrop-grid {
   position: absolute;
   inset: -10%;
-  background-image: linear-gradient(rgba(255, 170, 61, 0.055) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 170, 61, 0.055) 1px, transparent 1px);
+  background-image: linear-gradient(rgba(255, 159, 10, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 159, 10, 0.055) 1px, transparent 1px);
   background-size: 64px 64px;
   mask-image: radial-gradient(ellipse 90% 70% at 50% 30%, #000 0%, transparent 78%);
   -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 30%, #000 0%, transparent 78%);
@@ -194,8 +211,8 @@ a {
   max-height: 1100px;
   background: radial-gradient(
     circle,
-    rgba(255, 170, 61, 0.15) 0%,
-    rgba(255, 170, 61, 0.05) 38%,
+    rgba(255, 159, 10, 0.15) 0%,
+    rgba(255, 159, 10, 0.05) 38%,
     transparent 68%
   );
   filter: blur(28px);
@@ -235,8 +252,8 @@ a {
   opacity: 0;
   background: radial-gradient(
     circle closest-side,
-    rgba(255, 170, 61, 0.13) 0%,
-    rgba(255, 170, 61, 0.05) 38%,
+    rgba(255, 159, 10, 0.13) 0%,
+    rgba(255, 159, 10, 0.05) 38%,
     transparent 68%
   );
   transform: translate3d(var(--mx, 50vw), var(--my, 50vh), 0);
@@ -272,7 +289,7 @@ a {
   opacity: var(--slit);
   background: radial-gradient(
     150px circle at var(--sx) var(--sy),
-    rgba(255, 170, 61, 0.15),
+    rgba(255, 159, 10, 0.15),
     transparent 70%
   );
   transition: opacity 0.35s var(--ease);
@@ -351,7 +368,7 @@ a {
   height: 100%;
   width: var(--pill-w, 0);
   border-radius: 999px;
-  background: rgba(255, 170, 61, 0.1);
+  background: rgba(255, 159, 10, 0.1);
   box-shadow: inset 0 0 0 1px var(--hairline-warm);
   transform: translateX(var(--pill-x, 0));
   opacity: 0;
@@ -501,12 +518,17 @@ a {
 .page-inner {
   width: 100%;
   max-width: var(--measure);
-  /* "Safe centring": auto block margins centre the content when there is spare
-     room but collapse to zero when the content is taller than the viewport, so
-     an overflowing page scrolls from its true top instead of having its first
-     lines clipped (which is what plain `align-items: center` does). */
-  margin: auto;
-  padding: clamp(14px, 2.5vh, 32px) var(--gutter);
+  /* Top-anchored, not centred. Centring made every page's heading land at a
+     different height — a 127px swing between the shortest and tallest page —
+     so the title visibly jumped as you moved between them. A fixed top offset
+     keeps the heading on one line across the whole site and lets the content
+     below simply run shorter or longer, which is how a document behaves.
+     `margin-inline: auto` still centres horizontally. */
+  margin-inline: auto;
+  margin-block: 0;
+  /* The top offset is capped rather than purely proportional: on tall tablet
+     viewports a 5vh offset pushed the longest page past the fold. */
+  padding: clamp(20px, 4vh, 44px) var(--gutter) clamp(14px, 2.5vh, 32px);
 }
 
 .page-head {
@@ -534,7 +556,7 @@ a {
   max-width: 62ch;
   font-family: var(--display);
   font-size: clamp(16px, 1.9vw, 20px);
-  font-weight: 450;
+  font-weight: 400;
   line-height: 1.45;
   letter-spacing: var(--track-heading);
   color: var(--text);
@@ -566,6 +588,15 @@ a {
   display: none;
 }
 
+/* Form controls and buttons do not inherit font-family by default, so every
+   interactive element states it explicitly. These are icon-only, but leaving
+   them on the browser default would break the type stack if a label is ever
+   added. */
+.pager-btn,
+.pager-dot {
+  font-family: inherit;
+}
+
 .pager-btn {
   width: 32px;
   height: 32px;
@@ -585,8 +616,8 @@ a {
    the last hard-edged element left in the chrome. */
 .pager-btn:hover:not(:disabled) {
   color: var(--amber-bright);
-  background: rgba(255, 170, 61, 0.16);
-  box-shadow: inset 0 1px 0 0 rgba(255, 214, 160, 0.24),
+  background: rgba(255, 159, 10, 0.16);
+  box-shadow: inset 0 1px 0 0 rgba(255, 208, 138, 0.24),
     inset 0 0 0 1px var(--hairline-warm);
 }
 
@@ -614,13 +645,13 @@ a {
   border: 0;
   border-radius: 50%;
   /* Inactive dots must still clear the 3:1 non-text contrast threshold. */
-  background: rgba(242, 238, 230, 0.45);
+  background: rgba(255, 255, 255, 0.45);
   cursor: pointer;
   transition: background 0.25s var(--ease), width 0.3s var(--spring);
 }
 
 .pager-dot:hover {
-  background: rgba(255, 170, 61, 0.6);
+  background: rgba(255, 159, 10, 0.6);
 }
 
 .pager-dot.is-current {
@@ -682,20 +713,20 @@ main {
    wash over the blurred backdrop with a warm hairline and a specular top edge.
    The label carries the colour instead of the background carrying the weight. */
 .btn-primary {
-  background: rgba(255, 170, 61, 0.14);
+  background: rgba(255, 159, 10, 0.14);
   backdrop-filter: var(--blur);
   -webkit-backdrop-filter: var(--blur);
   color: var(--amber-bright);
-  box-shadow: inset 0 1px 0 0 rgba(255, 214, 160, 0.28),
-    inset 0 0 0 1px var(--hairline-warm), 0 4px 18px rgba(255, 170, 61, 0.12);
+  box-shadow: inset 0 1px 0 0 rgba(255, 208, 138, 0.28),
+    inset 0 0 0 1px var(--hairline-warm), 0 4px 18px rgba(255, 159, 10, 0.12);
 }
 
 .btn-primary:hover {
-  background: rgba(255, 170, 61, 0.22);
+  background: rgba(255, 159, 10, 0.22);
   color: var(--amber-bright);
   transform: translateY(-2px);
-  box-shadow: inset 0 1px 0 0 rgba(255, 214, 160, 0.38),
-    inset 0 0 0 1px rgba(255, 170, 61, 0.34), 0 8px 26px rgba(255, 170, 61, 0.2);
+  box-shadow: inset 0 1px 0 0 rgba(255, 208, 138, 0.38),
+    inset 0 0 0 1px rgba(255, 159, 10, 0.34), 0 8px 26px rgba(255, 159, 10, 0.2);
 }
 
 .btn-ghost {
@@ -708,8 +739,8 @@ main {
 
 .btn-ghost:hover {
   color: var(--amber);
-  background: rgba(255, 170, 61, 0.08);
-  box-shadow: inset 0 1px 0 0 rgba(255, 214, 160, 0.2),
+  background: rgba(255, 159, 10, 0.08);
+  box-shadow: inset 0 1px 0 0 rgba(255, 208, 138, 0.2),
     inset 0 0 0 1px var(--hairline-warm);
   transform: translateY(-2px);
 }
@@ -729,8 +760,12 @@ main {
 /* --------------------------------- hero -------------------------------- */
 
 /* The engraving is absolutely positioned, so the copy owns the whole width. */
+/* The home page is a hero rather than a document page, so it stays optically
+   centred instead of top-anchored like the rest. */
 .hero-inner {
   position: relative;
+  margin-block: auto;
+  padding-top: clamp(14px, 2.5vh, 32px);
 }
 
 .hero-copy {
@@ -826,6 +861,16 @@ main {
   pointer-events: none;
 }
 
+/* The <picture> wrapper sits between the figure and the image, so it must
+   carry the same sizing the image does — otherwise it takes its intrinsic
+   height, overflows the figure and inflates the page's scroll height. */
+.hero-engraving picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
 .hero-engraving img {
   width: 100%;
   height: 100%;
@@ -837,8 +882,10 @@ main {
   display: block;
   /* The asset carries a real alpha channel — its black background was baked out
      at build time, so there is no rectangle to hide and no blend mode or
-     contrast-crush needed. The stipple is already amber-tinted in the pixels. */
-  opacity: 0.62;
+     contrast-crush needed. The stipple is already amber-tinted in the pixels.
+     Held at 0.5: the portrait is the largest warm mass on the page, and any
+     higher it competes with the name for first read rather than supporting it. */
+  opacity: 0.5;
   /* A single elliptical mask, not two composited linear ones: mask-composite
      support is inconsistent and the two-gradient version left hard vertical
      seams where the layers met. One ellipse fades on every side at once.
@@ -866,7 +913,7 @@ main {
     transform: scale(1.03);
   }
   to {
-    opacity: 0.62;
+    opacity: 0.5;
     transform: none;
   }
 }
@@ -879,7 +926,7 @@ main {
   max-width: 62ch;
   font-family: var(--display);
   font-size: clamp(17px, 2vw, 21px);
-  font-weight: 450;
+  font-weight: 400;
   line-height: 1.5;
   letter-spacing: var(--track-heading);
   color: var(--text);
@@ -949,7 +996,7 @@ main {
   border-radius: var(--radius-sm);
   background: linear-gradient(
     to right,
-    rgba(255, 170, 61, 0.05),
+    rgba(255, 159, 10, 0.05),
     transparent 55%
   );
   opacity: 0;
@@ -1148,7 +1195,7 @@ main {
   place-items: center;
   border-radius: 8px;
   color: var(--amber);
-  background: rgba(255, 170, 61, 0.1);
+  background: rgba(255, 159, 10, 0.1);
   box-shadow: inset 0 0 0 1px var(--hairline-warm);
 }
 
@@ -1224,7 +1271,7 @@ main {
 .principle:hover {
   transform: translateY(-4px);
   background: var(--material-thick);
-  box-shadow: inset 0 1px 0 0 rgba(255, 214, 160, 0.22),
+  box-shadow: inset 0 1px 0 0 rgba(255, 208, 138, 0.22),
     inset 0 0 0 1px var(--hairline-warm), var(--shadow);
 }
 
@@ -1472,7 +1519,7 @@ main {
   position: absolute;
   inset: auto 0 0 0;
   height: 60%;
-  background: linear-gradient(to top, rgba(255, 170, 61, 0.07), transparent);
+  background: linear-gradient(to top, rgba(255, 159, 10, 0.07), transparent);
   opacity: 0;
   transition: opacity 0.4s var(--ease);
   pointer-events: none;
@@ -1481,7 +1528,7 @@ main {
 .project:hover {
   transform: translateY(-5px);
   background: var(--material-thick);
-  box-shadow: inset 0 1px 0 0 rgba(255, 214, 160, 0.22),
+  box-shadow: inset 0 1px 0 0 rgba(255, 208, 138, 0.22),
     inset 0 0 0 1px var(--hairline-warm), var(--shadow);
 }
 
@@ -1496,6 +1543,82 @@ main {
 
 .project-head {
   margin-bottom: 0;
+}
+
+/* A small amber tile above the project name, matching the icon language used
+   for skillsets and off-the-clock cards. Drawn inline rather than shipped as
+   files: at this size a stroked glyph is sharper than a scaled-down logo, and
+   it keeps every project on one visual footing. */
+.project-icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin-bottom: 10px;
+  border-radius: 9px;
+  color: var(--amber);
+  background: rgba(255, 159, 10, 0.1);
+  box-shadow: inset 0 1px 0 0 rgba(255, 208, 138, 0.2),
+    inset 0 0 0 1px var(--hairline-warm);
+  transition: color 0.3s var(--ease), background 0.3s var(--ease),
+    transform 0.35s var(--spring);
+}
+
+.project-icon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.project:hover .project-icon {
+  background: rgba(255, 159, 10, 0.18);
+  transform: translateY(-1px);
+}
+
+/* Below the three-column threshold the project grid wraps to two columns and
+   the cards grow taller, so the icon sits inline with the name to stop the
+   page running past the fold. A float cannot do this because `.project` is a
+   flex container and flex items ignore float, so the card becomes a two-column
+   grid with everything below the title spanning the full width. */
+@media (max-width: 1000px) {
+  .project {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-content: start;
+    column-gap: 11px;
+  }
+
+  .project-icon {
+    grid-column: 1;
+    grid-row: 1;
+    width: 30px;
+    height: 30px;
+    margin: 0;
+    border-radius: 8px;
+    align-self: center;
+  }
+
+  .project-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .project-name {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    margin-bottom: 0;
+  }
+
+  .project-meta,
+  .project-desc,
+  .tags,
+  .project-links {
+    grid-column: 1 / -1;
+  }
+
+  .project-meta {
+    margin-top: 10px;
+  }
 }
 
 .project-name {
@@ -1531,7 +1654,7 @@ main {
   font-family: var(--mono);
   font-size: 9.5px;
   font-weight: 600;
-  letter-spacing: 0.13em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--text-3);
   background: rgba(255, 255, 255, 0.055);
@@ -1546,7 +1669,7 @@ main {
 
 .chip-internal {
   color: var(--amber);
-  background: rgba(255, 170, 61, 0.1);
+  background: rgba(255, 159, 10, 0.1);
   box-shadow: inset 0 0 0 1px var(--hairline-warm);
 }
 
@@ -1661,7 +1784,7 @@ main {
 
 .offclock-item:hover {
   transform: translateY(-3px);
-  background: rgba(255, 170, 61, 0.05);
+  background: rgba(255, 159, 10, 0.05);
   box-shadow: inset 0 0 0 1px var(--hairline-warm);
 }
 
@@ -1673,7 +1796,7 @@ main {
   place-items: center;
   border-radius: 10px;
   color: var(--amber);
-  background: rgba(255, 170, 61, 0.1);
+  background: rgba(255, 159, 10, 0.1);
   box-shadow: inset 0 0 0 1px var(--hairline-warm);
   transition: color 0.25s var(--ease), background 0.25s var(--ease);
 }
@@ -1784,7 +1907,7 @@ main {
   height: 8px;
   border-radius: 50%;
   background: var(--amber);
-  box-shadow: 0 0 12px 2px rgba(255, 170, 61, 0.9);
+  box-shadow: 0 0 12px 2px rgba(255, 159, 10, 0.9);
 }
 
 .origin-pin-ring {
@@ -1818,7 +1941,7 @@ main {
   z-index: 2;
   font-size: 9.5px;
   letter-spacing: 0.02em;
-  color: rgba(242, 238, 230, 0.52);
+  color: rgba(255, 255, 255, 0.52);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
@@ -1881,7 +2004,7 @@ main {
 }
 
 .clink:hover {
-  background: rgba(255, 170, 61, 0.06);
+  background: rgba(255, 159, 10, 0.06);
   box-shadow: inset 0 0 0 1px var(--hairline-warm);
   transform: translateX(3px);
 }
@@ -1904,7 +2027,7 @@ main {
   place-items: center;
   border-radius: 9px;
   color: var(--amber);
-  background: rgba(255, 170, 61, 0.1);
+  background: rgba(255, 159, 10, 0.1);
   box-shadow: inset 0 0 0 1px var(--hairline-warm);
   transition: color 0.25s var(--ease), background 0.25s var(--ease);
 }
@@ -1916,7 +2039,7 @@ main {
 
 .clink-static:hover .clink-icon {
   color: var(--amber);
-  background: rgba(255, 170, 61, 0.1);
+  background: rgba(255, 159, 10, 0.1);
 }
 
 .clink-icon svg {
@@ -2034,7 +2157,7 @@ main {
 .field textarea:focus {
   outline: none;
   background: rgba(0, 0, 0, 0.45);
-  box-shadow: inset 0 0 0 1px var(--amber), 0 0 0 4px rgba(255, 170, 61, 0.14);
+  box-shadow: inset 0 0 0 1px var(--amber), 0 0 0 4px rgba(255, 159, 10, 0.14);
 }
 
 .field.has-error input,
@@ -2162,12 +2285,15 @@ main {
   .hero-engraving {
     position: static;
     order: -1;
-    height: clamp(200px, 30vh, 300px);
-    width: 100%;
+    /* Full-bleed: cancel the page gutter so the portrait runs edge to edge. */
+    height: clamp(210px, 30vh, 310px);
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
   }
 
   .hero-inner {
@@ -2176,26 +2302,34 @@ main {
     justify-content: center;
   }
 
-  .hero-engraving img {
-    width: auto;
+  /* The <picture> element is the flex child, so it must carry the sizing —
+     otherwise it shrink-wraps and the image inside overflows the band. */
+  .hero-engraving picture {
+    display: block;
+    width: 100%;
     height: 100%;
+    min-height: 0;
+  }
+
+  .hero-engraving img {
+    /* The crop is supplied by the <picture> source above; `contain` then
+       guarantees the subject is never cut, whatever the viewport.
+       `min-height: 0` and an explicit max are both required: as a flex child
+       the image was stretching past the figure's height and being guillotined
+       by its edge, which showed up as a hard horizontal line under the chin. */
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    max-height: 100%;
     object-fit: contain;
     object-position: 50% 50%;
-    /* Phones render this on a small, often dim screen, so it needs more
-       presence than the desktop treatment to avoid washing out entirely. */
-    opacity: 0.66;
-    mask-image: radial-gradient(
-      ellipse 60% 54% at 50% 48%,
-      #000 56%,
-      rgba(0, 0, 0, 0.5) 80%,
-      transparent 98%
-    );
-    -webkit-mask-image: radial-gradient(
-      ellipse 60% 54% at 50% 48%,
-      #000 56%,
-      rgba(0, 0, 0, 0.5) 80%,
-      transparent 98%
-    );
+    opacity: 0.58;
+    /* No CSS mask on phones. The fade is baked into the asset's alpha channel,
+       which is exact: a mask sized in percentages of the box does not know
+       where `contain` actually painted the image, so its falloff landed short
+       of the edge and left the shoulders ending on a hard line. */
+    mask-image: none;
+    -webkit-mask-image: none;
   }
 
   @keyframes engrave {
@@ -2204,7 +2338,7 @@ main {
       transform: scale(1.03);
     }
     to {
-      opacity: 0.66;
+      opacity: 0.58;
       transform: none;
     }
   }
@@ -2219,7 +2353,7 @@ main {
      it down and tighten the copy's rhythm — tall phones keep the larger crop. */
   @media (max-height: 860px) {
     .hero-engraving {
-      height: clamp(190px, 26vh, 260px);
+      height: clamp(180px, 25vh, 250px);
     }
 
     .hero-name {
@@ -2398,6 +2532,18 @@ main {
 
   .project {
     padding: 20px 18px 22px;
+  }
+
+  /* The icon sits inline with the name on phones (see the max-width: 1000px
+     block above), so only the sizing needs adjusting here. */
+  .project-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .project-icon svg {
+    width: 15px;
+    height: 15px;
   }
 
   .project-name {

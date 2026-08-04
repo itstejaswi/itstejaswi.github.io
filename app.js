@@ -462,7 +462,11 @@
           img.style.width = px / scale + "px";
           img.style.height = px / scale + "px";
           img.src =
-            "https://basemaps.cartocdn.com/dark_all/" + ZOOM + "/" + wrapped +
+            // `dark_nolabels`, not `dark_all`: the labelled basemap renders the
+            // city name into the tile itself, which puts a location identifier
+            // on the page. This variant ships the same styling with no place
+            // names, so the map stays purely atmospheric.
+            "https://basemaps.cartocdn.com/dark_nolabels/" + ZOOM + "/" + wrapped +
             "/" + ty + suffix + ".png";
           frag.appendChild(img);
         }
