@@ -1,7 +1,7 @@
-# tejaswimsft.github.io
+# itstejaswi.github.io
 
 My personal site — a paged, keyboard-navigable single page served from
-GitHub Pages at [tejaswimsft.github.io](https://tejaswimsft.github.io/).
+GitHub Pages at [itstejaswi.github.io](https://itstejaswi.github.io/).
 
 ## What it is
 
