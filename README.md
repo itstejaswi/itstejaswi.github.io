@@ -1,4 +1,4 @@
-# itstejaswi.github.io
+﻿# itstejaswi.github.io
 
 My personal site — a paged, keyboard-navigable single page served from
 GitHub Pages at [itstejaswi.github.io](https://itstejaswi.github.io/).
@@ -66,6 +66,6 @@ Copyright (C) 2026 Tejaswi C.
 
 Released under the [GNU AGPL v3](LICENSE). You may use, study, modify and share
 it freely. If you run a modified version and let others use it over a network,
-section 13 requires you to offer them your source as well � rehosting it
+section 13 requires you to offer them your source as well — rehosting it
 unchanged is welcome, rehosting it changed and silent is not.
 
