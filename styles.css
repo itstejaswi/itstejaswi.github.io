@@ -1718,18 +1718,15 @@ main {
    one, as width allows. */
 .projects {
   display: grid;
-  /* 290px packs three abreast on a wide screen, at 335px each -- narrower than
-     the cards' own contents, so five of six wrapped their role line or their
-     tags while the section had room to spare. A wider minimum gives two roomier
-     columns and nothing wraps. */
-  grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr));
+  /* Three abreast on a wide screen. Narrow cards are the point: they keep the
+     descriptions short, and anything that will not fit belongs behind the link
+     rather than on the card. */
+  grid-template-columns: repeat(auto-fit, minmax(min(290px, 100%), 1fr));
   gap: 16px;
 }
 
 .project {
   position: relative;
-  display: flex;
-  flex-direction: column;
   padding: 22px 22px 24px;
   border-radius: var(--radius);
   background: var(--material);
@@ -1802,50 +1799,53 @@ main {
   transform: translateY(-1px);
 }
 
-/* Below the three-column threshold the project grid wraps to two columns and
-   the cards grow taller, so the icon sits inline with the name to stop the
-   page running past the fold. A float cannot do this because `.project` is a
-   flex container and flex items ignore float, so the card becomes a two-column
-   grid with everything below the title spanning the full width. */
-@media (max-width: 1000px) {
-  .project {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    align-content: start;
-    column-gap: 11px;
-  }
+/* The icon sits inline with the name, and everything below spans the full
+   width. Stacking the icon above the title cost a whole row and squeezed the
+   role line into the space left beside the chip, where the longer ones wrapped.
+   A float cannot do this because `.project` is a flex container and flex items
+   ignore float, so the card is a two-column grid instead. */
+.project {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-content: start;
+  column-gap: 11px;
+}
 
+.project-icon {
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0;
+  align-self: center;
+}
+
+.project-name {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+  margin-bottom: 0;
+}
+
+.project-meta,
+.project-desc,
+.tags,
+.project-links {
+  grid-column: 1 / -1;
+}
+
+.project-meta {
+  margin-top: 12px;
+}
+
+@media (max-width: 1000px) {
   .project-icon {
-    grid-column: 1;
-    grid-row: 1;
     width: 30px;
     height: 30px;
-    margin: 0;
     border-radius: 8px;
-    align-self: center;
   }
 
   .project-icon svg {
     width: 16px;
     height: 16px;
-  }
-
-  .project-name {
-    grid-column: 2;
-    grid-row: 1;
-    align-self: center;
-    margin-bottom: 0;
-  }
-
-  .project-meta,
-  .project-desc,
-  .tags,
-  .project-links {
-    grid-column: 1 / -1;
-  }
-
-  .project-meta {
-    margin-top: 10px;
   }
 }
 
@@ -1870,7 +1870,10 @@ main {
   margin: 0;
   font-family: var(--mono);
   font-size: 11px;
-  letter-spacing: 0.1em;
+  /* Tracked out for the uppercase mono, but only just: at 0.1em the longest
+     role lines ran a few pixels past the chip beside them and wrapped, which
+     costs a whole line to save a fraction of one. */
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--amber-dim);
 }
