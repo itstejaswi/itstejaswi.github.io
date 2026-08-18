@@ -1718,7 +1718,11 @@ main {
    one, as width allows. */
 .projects {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(290px, 100%), 1fr));
+  /* 290px packs three abreast on a wide screen, at 335px each -- narrower than
+     the cards' own contents, so five of six wrapped their role line or their
+     tags while the section had room to spare. A wider minimum gives two roomier
+     columns and nothing wraps. */
+  grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr));
   gap: 16px;
 }
 
