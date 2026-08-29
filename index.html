@@ -529,8 +529,43 @@
               Things I've built. Some at work, some at 1 a.m., all because
               something should have existed and didn't.
             </p>
-
             <div class="projects stagger">
+              <article class="project">
+
+                <span class="project-icon" aria-hidden="true">
+                  <!-- Jarvis's own mark, the one its widget draws: a filled bolt,
+                       with two arcs for the voice leaving it. The arcs are what
+                       separate this from a generic "power" or "fast" glyph. -->
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12.4 2.8 6.2 12.6h3.4l-1.5 6.3 6.7-9.9h-3.6Z" fill="currentColor" stroke="none" />
+                    <path d="M17.4 8.1a5.2 5.2 0 0 1 0 5.9" />
+                    <path d="M20 5.6a8.6 8.6 0 0 1 0 10.9" />
+                  </svg>
+                </span>
+                <h3 class="project-name">Jarvis</h3>
+                <div class="project-meta">
+                  <p class="project-role">Voice for Scout &middot; On-device</p>
+                  <span class="chip chip-active">Active</span>
+                </div>
+
+                <p class="project-desc">
+                  Speak to Microsoft Scout and hear it answer back. Recognition and
+                  the voice both run on the machine, so nothing spoken leaves it
+                  &mdash; and Scout keeps the reasoning and the tools. A voice, not
+                  a second assistant.
+                </p>
+
+                <ul class="tags" aria-label="Technologies">
+                  <li>.NET</li>
+                  <li>WPF</li>
+                  <li>Whisper</li>
+                  <li>Kokoro</li>
+                </ul>
+
+                <div class="project-links">
+                  <span class="link-static">Internal release only</span>
+                </div>
+              </article>
               <article class="project">
 
                 <span class="project-icon" aria-hidden="true">
@@ -609,7 +644,6 @@
                   <a class="link-out link-muted" href="https://github.com/itstejaswi/truepaste" target="_blank" rel="noopener noreferrer">Source<span aria-hidden="true">&#8599;</span></a>
                 </div>
               </article>
-
               <article class="project">
 
                 <span class="project-icon" aria-hidden="true">
@@ -645,33 +679,6 @@
                   <a class="link-out link-muted" href="https://github.com/itstejaswi/stub" target="_blank" rel="noopener noreferrer">Source<span aria-hidden="true">↗</span></a>
                 </div>
               </article>
-            </div>
-          </div>
-        </article>
-
-        <!-- ---- work 1b: the rest of the projects ----
-             Six cards is two rows of three, and two rows has never fitted one
-             panel at any viewport — the second row was clipped at the fold.
-             Split into two pages of three, which is what the deck is already
-             for; the pager counts pages itself, so nothing else changes. -->
-        <article class="page" data-page="2">
-          <span class="page-glyph" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4 7.4h16v12.2H4z" /><path d="M8.8 7.4V5.6a1.6 1.6 0 0 1 1.6-1.6h3.2a1.6 1.6 0 0 1 1.6 1.6v1.8" /><path d="M4 12.4h16" />
-            </svg>
-          </span>
-          <div class="page-inner stagger">
-            <div class="page-head">
-              <h2 class="page-title">Projects</h2>
-              <span class="page-rule" aria-hidden="true"></span>
-            </div>
-
-            <p class="page-lede">
-              Two finished experiments, one that started as a workaround for a
-              single case and stayed &mdash; and one that talks back.
-            </p>
-
-            <div class="projects stagger">
               <article class="project">
 
                 <span class="project-icon" aria-hidden="true">
@@ -690,7 +697,9 @@
                   Point it anywhere on Earth and watch what's overhead. Live
                   aircraft telemetry as an amber HUD over a dark map &mdash; route
                   arcs, airport beacons, cinematic overlays. No backend, no
-                  server, entirely in the browser.
+                  server, entirely in the browser; since the public ADS-B
+                  networks closed browser access in 2026, it runs on a feed key
+                  you bring yourself.
                 </p>
 
                 <ul class="tags" aria-label="Technologies">
@@ -705,7 +714,6 @@
                   <a class="link-out link-muted" href="https://github.com/itstejaswi/vector" target="_blank" rel="noopener noreferrer">Source<span aria-hidden="true">↗</span></a>
                 </div>
               </article>
-
               <article class="project">
 
                 <span class="project-icon" aria-hidden="true">
@@ -739,7 +747,6 @@
                   <a class="link-out link-muted" href="https://github.com/itstejaswi/lumen" target="_blank" rel="noopener noreferrer">Source<span aria-hidden="true">↗</span></a>
                 </div>
               </article>
-
               <article class="project">
 
                 <span class="project-icon" aria-hidden="true">
@@ -756,9 +763,10 @@
 
                 <p class="project-desc">
                   Telemetry from every client surface and backend path,
-                  correlated into one investigative view. Started as a workaround
-                  for one stubborn case; now a daily tool across four functions
-                  and three continents.
+                  correlated into one investigative view, plus a live geographic
+                  picture of platform activity. Started as a workaround for one
+                  stubborn case; now a daily tool across four functions and
+                  three continents.
                 </p>
 
                 <ul class="tags" aria-label="Capabilities">
@@ -772,48 +780,10 @@
                 </div>
               </article>
 
-              <article class="project">
-
-                <span class="project-icon" aria-hidden="true">
-                  <!-- Jarvis's own mark, the one its widget draws: a filled bolt,
-                       with two arcs for the voice leaving it. The arcs are what
-                       separate this from a generic "power" or "fast" glyph. -->
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12.4 2.8 6.2 12.6h3.4l-1.5 6.3 6.7-9.9h-3.6Z" fill="currentColor" stroke="none" />
-                    <path d="M17.4 8.1a5.2 5.2 0 0 1 0 5.9" />
-                    <path d="M20 5.6a8.6 8.6 0 0 1 0 10.9" />
-                  </svg>
-                </span>
-                <h3 class="project-name">Jarvis</h3>
-                <div class="project-meta">
-                  <p class="project-role">Voice for Scout &middot; On-device</p>
-                  <span class="chip chip-active">Active</span>
-                </div>
-
-                <p class="project-desc">
-                  Speak to Microsoft Scout and hear it answer back. Recognition and
-                  the voice both run on the machine, so nothing spoken leaves it
-                  &mdash; and Scout keeps the reasoning and the tools. A voice, not
-                  a second assistant.
-                </p>
-
-                <ul class="tags" aria-label="Technologies">
-                  <li>.NET</li>
-                  <li>WPF</li>
-                  <li>Whisper</li>
-                  <li>Kokoro</li>
-                </ul>
-
-                <div class="project-links">
-                  <span class="link-static">Internal release only</span>
-                </div>
-              </article>
             </div>
           </div>
-        </article>
-
-        <!-- ---- work 2 ---- -->
-        <article class="page" data-page="3">
+        </article>        <!-- ---- work 2 ---- -->
+        <article class="page" data-page="2">
           <span class="page-glyph" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round">
               <!-- Building blocks: something assembled from parts. A trophy
@@ -912,7 +882,7 @@
         </article>
 
         <!-- ---- work 3: off the clock ---- -->
-        <article class="page" data-page="4">
+        <article class="page" data-page="3">
           <span class="page-glyph" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="8.6" /><path d="M12 6.8V12l3.4 2" />

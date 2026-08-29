@@ -1729,17 +1729,32 @@ main {
      descriptions short, and anything that will not fit belongs behind the link
      rather than on the card.
 
-     The floor is 246px rather than 290px so that a FOURTH card joins the row
-     instead of wrapping. auto-fit collapses the spare track, so a page of three
-     is laid out exactly as before at 335px; only a page of four changes, and
-     the alternative there was a second row clipped at the fold. */
-  grid-template-columns: repeat(auto-fit, minmax(min(246px, 100%), 1fr));
+     ⚠️ Three FIXED tracks, not auto-fit. auto-fit divides the measure by
+     however many cards a page happens to hold, so a page of four squeezed them
+     to 247px each and every description ran to eleven lines — while several
+     hundred pixels of the panel sat empty below. The cards were being narrowed
+     to avoid using vertical space that was already there.
+
+     A fourth card now wraps to a second row at 335px, which fits outright on a
+     1080-tall display and scrolls a little below that. The panel scrolls by
+     design; cramping the text does not. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
+}
+
+@media (max-width: 1000px) {
+  /* Below the measure the fixed tracks would be narrower than the text needs,
+     so the grid goes back to fitting as many as will hold 290px. */
+  .projects {
+    grid-template-columns: repeat(auto-fit, minmax(min(290px, 100%), 1fr));
+  }
 }
 
 .project {
   position: relative;
-  padding: 22px 22px 24px;
+  /* Tighter than the 22/22/24 the cards carried while they were spread over
+     three pages. Seven on one panel is worth about 8px a side. */
+  padding: 18px 20px 20px;
   border-radius: var(--radius);
   background: var(--material);
   backdrop-filter: var(--blur);
@@ -1845,7 +1860,7 @@ main {
 }
 
 .project-meta {
-  margin-top: 12px;
+  margin-top: 8px;
 }
 
 @media (max-width: 1000px) {
@@ -1875,7 +1890,7 @@ main {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .project-role {
@@ -1949,6 +1964,28 @@ main {
   color: var(--text-2);
   flex: 1;
   text-wrap: pretty;
+}
+
+/* ⚠️ Clamped to three lines, not shortened.
+   Seven cards over three pages meant the pager carried what the panel could
+   have held; fitting them on one needed the tallest card down from 411px to
+   about 280. Cutting the descriptions to reach that would have left two-line
+   sentences and thrown away the writing.
+
+   A clamp is the better trade: the full text stays in the markup for search
+   and for a screen reader, and only the DISPLAY is bounded. The card shows the
+   opening three lines and the project's own page carries the rest, which is
+   where anything longer belonged anyway.
+
+   line-clamp is unprefixed in every current engine; the -webkit- pair is kept
+   for older WebKit, where it is the only spelling that works. */
+.project-desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 12px;
 }
 
 .tags {
