@@ -44,6 +44,13 @@
   --text-3: rgba(255, 255, 255, 0.52);
   --ok: #32d74b;
 
+  /* Work in progress, as against --ok for something finished.
+     Apple's own systemRed (#ff453a) measures 4.99:1 on the card surface,
+     which clears the 4.5 floor but leaves nothing spare for 9.5px uppercase
+     at 0.16em tracking. This is the same hue lifted until it matches the
+     green and amber for weight: 5.68:1. */
+  --wip: #ff5f52;
+
   /* Apple splits its UI face by optical size: SF Pro Display above ~20px,
      SF Pro Text below, where the larger x-height and looser spacing aid
      legibility. Segoe UI Variable mirrors that split on Windows. */
@@ -1720,8 +1727,13 @@ main {
   display: grid;
   /* Three abreast on a wide screen. Narrow cards are the point: they keep the
      descriptions short, and anything that will not fit belongs behind the link
-     rather than on the card. */
-  grid-template-columns: repeat(auto-fit, minmax(min(290px, 100%), 1fr));
+     rather than on the card.
+
+     The floor is 246px rather than 290px so that a FOURTH card joins the row
+     instead of wrapping. auto-fit collapses the spare track, so a page of three
+     is laid out exactly as before at 335px; only a page of four changes, and
+     the alternative there was a second row clipped at the fold. */
+  grid-template-columns: repeat(auto-fit, minmax(min(246px, 100%), 1fr));
   gap: 16px;
 }
 
@@ -1896,6 +1908,16 @@ main {
   color: var(--ok);
   background: rgba(50, 215, 75, 0.1);
   box-shadow: inset 0 0 0 1px rgba(50, 215, 75, 0.24);
+}
+
+/* Still being built, as against .chip-live for something finished and out.
+   These two were the same chip until the labels drifted: "Active" was doing
+   duty for both "shipped and live" and "I am working on this", which are
+   opposite claims about whether the thing is finished. */
+.chip-active {
+  color: var(--wip);
+  background: rgba(255, 95, 82, 0.1);
+  box-shadow: inset 0 0 0 1px rgba(255, 95, 82, 0.24);
 }
 
 .chip-internal {
