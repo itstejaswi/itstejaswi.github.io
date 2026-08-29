@@ -401,9 +401,20 @@
 
   /* ------------------------------ origin map ----------------------------- */
 
-  /* A static slippy-map view stitched from CartoDB dark-matter tiles.
+  /* A static slippy-map view stitched from Esri's dark canvas tiles.
      Deliberately not a map library: this is decoration, so it should cost one
-     small script and a handful of images rather than a 200KB dependency. */
+     small script and a handful of images rather than a 200KB dependency.
+
+     ⚠️ Moved off CARTO's dark-matter in Aug 2026, when CARTO began stamping
+     "API KEY REQUIRED" diagonally across their keyless basemap tiles. The
+     tiles still returned 200 — the watermark is painted into the image, so
+     nothing failed and nothing logged; the map simply started carrying an
+     advertisement.
+
+     A free CARTO key exists and covers 5M tiles a month, but any key used from
+     a static site sits in public JavaScript where anyone can lift it, and
+     CARTO's own terms ask that keys not be shared. Esri's canvas is keyless,
+     which leaves nothing to leak, rotate or renew. */
   (function originMap() {
     var el = document.getElementById("origin-map");
     if (!el) return;
@@ -439,8 +450,12 @@
       if (!w || !h) return false;
 
       // Retina: draw at 2x tile density so the map isn't soft on good screens.
+      //
+      // ⚠️ Esri serves one 256px tile and has no @2x variant, so "2x" here
+      // means twice as MANY tiles at a smaller CSS size rather than denser
+      // ones. That still sharpens the result — four tiles cover the area one
+      // did — and it is why the @2x filename suffix CARTO needed is gone.
       var scale = window.devicePixelRatio > 1.3 ? 2 : 1;
-      var suffix = scale === 2 ? "@2x" : "";
       var px = TILE * scale;
 
       // Everything below works in tile-pixel space, so the CSS dimensions have
@@ -480,9 +495,15 @@
           // next tile paints over the surplus.
           img.style.width = px / scale + 1 + "px";
           img.style.height = px / scale + 1 + "px";
+          // ⚠️ Esri orders its path {z}/{y}/{x} — row before column — where the
+          // XYZ convention CARTO used is {z}/{x}/{y}. Swapping them silently
+          // returns a valid tile from the wrong place: 11/1445/917 answers 200
+          // with a grey "Map data not yet available" square rather than a 404,
+          // so the map would look broken with nothing in the console.
           img.src =
-            "https://basemaps.cartocdn.com/dark_all/" + zoom + "/" + wrapped +
-            "/" + ty + suffix + ".png";
+            "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/" +
+            "World_Dark_Gray_Base/MapServer/tile/" + zoom + "/" + ty +
+            "/" + wrapped;
           frag.appendChild(img);
         }
       }
